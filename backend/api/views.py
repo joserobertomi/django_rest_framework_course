@@ -1,5 +1,23 @@
+import json
 from django.http import JsonResponse
 
 
 def api_home(request, *args, **kargs):
-    return JsonResponse({"message": "hey there this is an massage in the bottle!!"})
+    # request -> HttpRequest -> Django
+    # print(dir(request))
+    # resquest.body
+
+    print(request.GET)
+    body = request.body #Byte string of json data
+    data = {}
+    try:
+        data = json.loads(body)
+    except:
+        pass
+    
+    print(data)
+    data['params'] = dict(request.GET)
+    data['headers'] = dict(request.headers)
+    data['content_type'] = request.content_type
+
+    return JsonResponse(data)
